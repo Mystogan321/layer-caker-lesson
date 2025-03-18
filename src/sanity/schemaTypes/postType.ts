@@ -41,6 +41,11 @@ export const postType = defineType({
       name: 'categories',
       type: 'array',
       of: [defineArrayMember({type: 'reference', to: {type: 'category'}})],
+      validation: rule => rule.custom((value, context) => {
+        const parent = context?.parent as {asset?: {_ref?: string}}
+    
+        return !value && parent?.asset?._ref ? 'Alt text is required when an image is present' : true
+      }),
     }),
     defineField({
       name: 'publishedAt',
